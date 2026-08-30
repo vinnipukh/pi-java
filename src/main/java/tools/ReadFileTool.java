@@ -33,8 +33,7 @@ public class ReadFileTool{
     public static String execute(String filePath){
         try {
             return Files.readString(Path.of(filePath));
-        }
-        catch {
+        } catch (IOException e) {
             return "Error reading file: " + e.getMessage();
         }
 
