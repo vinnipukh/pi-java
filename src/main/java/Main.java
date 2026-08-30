@@ -68,7 +68,7 @@ public class Main {
                             ChatCompletionCreateParams.builder()
                                     .model("anthropic/claude-haiku-4.5")
                                     .addUserMessage(prompt)
-                                    .addAssistantMessage(message)
+                                    .addMessage(message)
                                     .addToolMessage(toolCall.id(), fileContent)
                                     .build()
                     );
