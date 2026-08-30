@@ -26,7 +26,7 @@ public class ReadFileTool{
                                         )
                                     ))
                                     .putAdditionalProperty("required",List.of("file_path"))
-                                    .build())
+                                    .build()
                                     .build())
                                                 .build();
     }
