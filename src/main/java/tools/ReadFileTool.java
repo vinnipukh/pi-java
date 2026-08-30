@@ -3,6 +3,7 @@ package tools;
 import com.openai.models.chat.completions.ChatCompletionTool;
 import com.openai.models.FunctionDefinition;
 import com.openai.models.FunctionParameters;
+import com.openai.core.JsonValue;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,14 +18,14 @@ public class ReadFileTool{
             .name("read_file")
             .description("Read and return the contents of a file")
             .parameters(FunctionParameters.builder()
-                .putAdditionalProperty("type", "object")
-                .putAdditionalProperty("properties", Map.of(
+                .putAdditionalProperty("type", JsonValue.from("object"))
+                .putAdditionalProperty("properties", JsonValue.from(Map.of(
                     "file_path", Map.of(
                         "type", "string",
                         "description", "The path to the file to read"
                     )
-                ))
-                .putAdditionalProperty("required", List.of("file_path"))
+                )))
+                .putAdditionalProperty("required", JsonValue.from(List.of("file_path")))
                 .build())
             .build())
         .build();

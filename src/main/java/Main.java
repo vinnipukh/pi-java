@@ -3,6 +3,7 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.ChatCompletionToolMessageParam;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -69,7 +70,10 @@ public class Main {
                                     .model("anthropic/claude-haiku-4.5")
                                     .addUserMessage(prompt)
                                     .addMessage(message)
-                                    .addToolMessage(toolCall.id(), fileContent)
+                                    .addMessage(ChatCompletionToolMessageParam.builder()
+                                                                                .toolCallId(toolCall.id())
+                                                                                .content(fileContent)
+                                                                                .build())
                                     .build()
                     );
 
