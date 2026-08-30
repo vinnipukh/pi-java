@@ -1,7 +1,13 @@
+import tools.ReadFileTool;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.chat.completions.ChatCompletion;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Main {
     public static void main(String[] args) {
@@ -31,7 +37,7 @@ public class Main {
                 ChatCompletionCreateParams.builder()
                         .model("anthropic/claude-haiku-4.5")
                         .addUserMessage(prompt)
-                        .addTool(ReadFileTool.class)
+                        .addTool(ReadFileTool.getToolDefinition())
                         .build()
         );
 
@@ -39,10 +45,46 @@ public class Main {
             throw new RuntimeException("no choices in response");
         }
 
+        var message = response.choices().get(0).message();
+
+        if (message.toolCalls().isPresent() && !message.toolCalls().get().isEmpty()) {
+                    var toolCall = message.toolCalls().get().get(0);
+
+                    // LLM'in istediği file_path argümanını parse et
+                    ObjectMapper mapper = new ObjectMapper();
+                    JsonNode argsJson = mapper.readTree(toolCall.function().arguments());
+                    String filePath = argsJson.get("file_path").asText();
+
+                    // Dosyayı oku
+                    String fileContent;
+                    try {
+                        fileContent = Files.readString(Path.of(filePath));
+                    } catch (Exception e) {
+                        fileContent = "Error reading file: " + e.getMessage();
+                    }
+
+                    // 3. Dosya içeriğini LLM'e geri ilet
+                    ChatCompletion finalResponse = client.chat().completions().create(
+                            ChatCompletionCreateParams.builder()
+                                    .model("anthropic/claude-haiku-4.5")
+                                    .addUserMessage(prompt)
+                                    .addAssistantMessage(message)
+                                    .addToolMessage(toolCall.id(), fileContent)
+                                    .build()
+                    );
+
+                    System.out.print(finalResponse.choices().get(0).message().content().orElse(""));
+                } else {
+                    // Model doğrudan metin döndüyse ekrana bas
+                    System.out.print(message.content().orElse(""));
+                }
+
+
+
+
         // You can use print statements as follows for debugging, they'll be visible when running tests.
         System.err.println("Logs from your program will appear here!");
 
-        // TODO: Uncomment the line below to pass the first stage
         System.out.print(response.choices().get(0).message().content().orElse(""));
     }
 }
