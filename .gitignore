@@ -1,3 +1,26 @@
-*.jar
+# Ortam değişkenleri ve sırlar
+.env
+.env.*
+!.env.example
+
+# Derleme ve çıktı klasörleri
 target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA & Eclipse
 .idea/
+*.iml
+*.iws
+*.ipr
+out/
+.settings/
+.project
+.classpath
+
+# Loglar ve geçici dosyalar
+*.log
+.DS_Store
+Thumbs.db
