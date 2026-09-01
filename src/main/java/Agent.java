@@ -75,13 +75,13 @@ public class Agent{
                 return WriteFileTool.execute(file_path,content);
                 }
 
-                // Future tools go here:
-                           //
-                           //
-                           // case "bash":
-                           //     return BashTool.execute(arguments);
+                case "bash":{
+                String command = argJson.get("command").asText();
+                return BashTool.execute(command);
+                }
                 default:
                     return "Unknown tool: " + toolName;
+
 
             }
 
@@ -95,7 +95,7 @@ public class Agent{
                             .messages(messages)
                             .addTool(ReadFileTool.getToolDefinition())
                             .addTool(WriteFileTool.getToolDefinition())
-                            // .addTool(BashTool.getToolDefinition())
+                            .addTool(BashTool.getToolDefinition())
                             .build()
             );
         }
