@@ -43,7 +43,8 @@ public class BashTool{
 
     public static String execute(String command) {
         try {
-            Process process = new ProcessBuilder("cmd.exe", "/c", command).start();
+            if(os.name==windows) Process process = new ProcessBuilder("cmd.exe", "/c", command).start();
+            else Process process = new ProcessBuilder("bash", "-c", command).start();
             CompletableFuture<String> stdout = CompletableFuture.supplyAsync(
                     () -> read(process.inputReader()));
             CompletableFuture<String> stderr = CompletableFuture.supplyAsync(
