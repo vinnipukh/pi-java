@@ -42,7 +42,7 @@ public class Agent{
                 break;
             }
 
-            messages.add(message.toParam());
+            messages.add(ChatCompletionMessageParam.ofAssistant(message.toParam()));
 
             for(var toolCall: message.toolCalls().get()){
                 String result = executeTool(toolCall);
