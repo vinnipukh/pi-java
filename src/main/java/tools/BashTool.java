@@ -5,37 +5,28 @@ import com.openai.models.FunctionDefinition;
 import com.openai.models.FunctionParameters;
 import com.openai.core.JsonValue;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 
-public class ReadFileTool{
+public class BashTool{
     public static ChatCompletionTool getToolDefinition() {
     return ChatCompletionTool.builder()
         .function(FunctionDefinition.builder()
-            .name("read_file")
-            .description("Read and return the contents of a file.")
+            .name("bash")
+            .description("Execute a shell command in the project workspace and return its standard output, standard error, and exit status.")
             .parameters(FunctionParameters.builder()
                 .putAdditionalProperty("type", JsonValue.from("object"))
                 .putAdditionalProperty("properties", JsonValue.from(Map.of(
-                    "file_path", Map.of(
+                    "command", Map.of(
                         "type", "string",
-                        "description", "The path to the file to read."
+                        "description", "The shell command to execute. Use this for inspecting files, running tests, or performing project operations."
                     )
                 )))
-                .putAdditionalProperty("required", JsonValue.from(List.of("file_path")))
+                .putAdditionalProperty("required", JsonValue.from(List.of("command")))
                 .build())
             .build())
         .build();
     }
-    public static String execute(String filePath){
-        try {
-            return Files.readString(Path.of(filePath));
-        } catch (IOException e) {
-            return "Error reading file: " + e.getMessage();
-        }
 
-    }
+
 }

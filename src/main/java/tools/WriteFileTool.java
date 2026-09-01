@@ -5,37 +5,32 @@ import com.openai.models.FunctionDefinition;
 import com.openai.models.FunctionParameters;
 import com.openai.core.JsonValue;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.io.IOException;
 import java.util.Map;
 import java.util.List;
 
-public class ReadFileTool{
+
+public class WriteFileTool{
     public static ChatCompletionTool getToolDefinition() {
     return ChatCompletionTool.builder()
         .function(FunctionDefinition.builder()
-            .name("read_file")
-            .description("Read and return the contents of a file.")
+            .name("write_file")
+            .description("Creates or overwrites a file using the given content.")
             .parameters(FunctionParameters.builder()
                 .putAdditionalProperty("type", JsonValue.from("object"))
                 .putAdditionalProperty("properties", JsonValue.from(Map.of(
                     "file_path", Map.of(
                         "type", "string",
-                        "description", "The path to the file to read."
+                        "description", "The path of the file to create or overwrite."
+                    ),
+                    "content", Map.of(
+                        "type", "string",
+                        "description", "The complete text content to write into the file."
+
                     )
                 )))
-                .putAdditionalProperty("required", JsonValue.from(List.of("file_path")))
+                .putAdditionalProperty("required", JsonValue.from(List.of("file_path","content")))
                 .build())
             .build())
         .build();
-    }
-    public static String execute(String filePath){
-        try {
-            return Files.readString(Path.of(filePath));
-        } catch (IOException e) {
-            return "Error reading file: " + e.getMessage();
-        }
-
     }
 }
