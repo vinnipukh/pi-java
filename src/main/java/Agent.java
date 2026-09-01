@@ -76,7 +76,7 @@ public class Agent{
                 }
 
                 case "bash":{
-                String command = argJson.get("command").asText();
+                String command = argsJson.get("command").asText();
                 return BashTool.execute(command);
                 }
                 default:
