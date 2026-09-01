@@ -26,7 +26,7 @@ public class Agent{
 
     public void run(String prompt)throws Exception{
 
-        messages.add(ChatCompletionUserMessageParam.builder().content(prompt).build());
+        messages.add(ChatCompletionMessageParam.ofUser(ChatCompletionUserMessageParam.builder().content(prompt).build()));
 
         while(true){
             ChatCompletion response = callModel();
@@ -42,15 +42,15 @@ public class Agent{
                 break;
             }
 
-            messages.add(message);
+            messages.add(message.toParam());
 
             for(var toolCall: message.toolCalls().get()){
                 String result = executeTool(toolCall);
 
-                messages.add( ChatCompletionToolMessageParam.builder()
+                messages.add( ChatCompletionMessageParam.ofTool(ChatCompletionToolMessageParam.builder()
                                        .toolCallId(toolCall.id())
                                        .content(result)
-                                       .build());
+                                       .build()));
             }
         }
     }
