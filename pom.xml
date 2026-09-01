@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.codecrafters</groupId>
-    <artifactId>codecrafters-claude-code</artifactId>
-    <version>1.0</version>
+    <groupId>com.vinnipukh</groupId>
+    <artifactId>pi-java</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -39,7 +39,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>codecrafters-claude-code</finalName> <!-- Please do not change this final artifact name-->
+                    <finalName>pi-java</finalName>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -51,7 +51,6 @@
                             <mainClass>Main</mainClass>
                         </manifest>
                     </archive>
-                    <outputDirectory>${dir}</outputDirectory>
                 </configuration>
 
                 <executions>
