@@ -8,7 +8,7 @@ import com.openai.core.JsonValue;
 import java.util.Map;
 import java.util.List;
 import java.nio.file.Files;
-import java.nio.Path;
+import java.nio.file.Path;
 import java.io.FileWriter;
 import java.io.IOException;
 
