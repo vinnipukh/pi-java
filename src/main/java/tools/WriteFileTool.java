@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class WriteFileTool{
@@ -46,11 +45,11 @@ public class WriteFileTool{
             if(path.getParent()!=null){
                 Files.createDirectories(path.getParent());
             }
-            try (FileWriter writer = new FileWriter(path)) {
-                writer.write(content);
-                if(exists) return "Successfully overwrote with the requested content.";
-                else return "Successfully created a new file with the requested content.";
-            }
+
+            Files.writeString(path,content);
+            if(exists) return "Successfully overwrote with the requested content.";
+            else return "Successfully created a new file with the requested content.";
+
         } catch(IOException e){
             return "An error occurred while writing file at "+ file_path + " " + e;
         }
