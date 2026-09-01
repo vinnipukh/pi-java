@@ -64,14 +64,19 @@ public class Agent{
             String toolName = toolCall.function().name() ;
 
             switch (toolName){
-                case "read_file":
-                String filePath = argsJson.get("file_path").asText();
-                return ReadFileTool.execute(filePath);
+                case "read_file":{
+                String file_path = argsJson.get("file_path").asText();
+                return ReadFileTool.execute(file_path);
+                }
+
+                case "write_file":{
+                String file_path = argsJson.get("file_path").asText();
+                String content = argsJson.get("content").asText();
+                return WriteFileTool.execute(file_path,content);
+                }
 
                 // Future tools go here:
                            //
-                           // case "write_file":
-                           //     return WriteFileTool.execute(arguments);
                            //
                            // case "bash":
                            //     return BashTool.execute(arguments);
@@ -89,7 +94,7 @@ public class Agent{
                             .model("anthropic/claude-haiku-4.5")
                             .messages(messages)
                             .addTool(ReadFileTool.getToolDefinition())
-                            // .addTool(WriteFileTool.getToolDefinition())
+                            .addTool(WriteFileTool.getToolDefinition())
                             // .addTool(BashTool.getToolDefinition())
                             .build()
             );

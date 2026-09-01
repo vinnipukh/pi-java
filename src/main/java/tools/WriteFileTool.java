@@ -7,24 +7,27 @@ import com.openai.core.JsonValue;
 
 import java.util.Map;
 import java.util.List;
-
+import java.nio.file.Files;
+import java.nio.Path;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class WriteFileTool{
     public static ChatCompletionTool getToolDefinition() {
     return ChatCompletionTool.builder()
         .function(FunctionDefinition.builder()
             .name("write_file")
-            .description("Creates or overwrites a file using the given content.")
+            .description("Write content to a file")
             .parameters(FunctionParameters.builder()
                 .putAdditionalProperty("type", JsonValue.from("object"))
                 .putAdditionalProperty("properties", JsonValue.from(Map.of(
                     "file_path", Map.of(
                         "type", "string",
-                        "description", "The path of the file to create or overwrite."
+                        "description", "The path of the file to write to"
                     ),
                     "content", Map.of(
                         "type", "string",
-                        "description", "The complete text content to write into the file."
+                        "description", "The content to write to the file."
 
                     )
                 )))
@@ -33,4 +36,24 @@ public class WriteFileTool{
             .build())
         .build();
     }
+
+    public static String execute(String file_path,String content){
+        Path path = Path.of(file_path);
+
+        boolean exists = Files.exists(path);
+
+        try  {
+            if(path.getParent()!=null){
+                Files.createDirectories(path.getParent());
+            }
+            try (FileWriter writer = new FileWriter(path)) {
+                writer.write(content);
+                if(exists) return "Successfully overwrote with the requested content.";
+                else return "Successfully created a new file with the requested content.";
+            }
+        } catch(IOException e){
+            return "An error occurred while writing file at "+ file_path + " " + e;
+        }
+
+}
 }
