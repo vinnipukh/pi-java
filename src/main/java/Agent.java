@@ -91,7 +91,7 @@ public class Agent{
         private ChatCompletion callModel() {
             return client.chat().completions().create(
                     ChatCompletionCreateParams.builder()
-                            .model("anthropic/claude-haiku-4.5")
+                            .model("openrouter/free")
                             .messages(messages)
                             .addTool(ReadFileTool.getToolDefinition())
                             .addTool(WriteFileTool.getToolDefinition())
